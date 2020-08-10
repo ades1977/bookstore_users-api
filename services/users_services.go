@@ -4,6 +4,7 @@ import (
 	"github.com/ades1977/bookstore_users-api/domain/users"
 	"github.com/ades1977/bookstore_users-api/utils/date_utils"
 	"github.com/ades1977/bookstore_users-api/utils/errors"
+	"github.com/ades1977/bookstore_users-api/utils/password_utils"
 )
 
 func GetUser(userId int64)  ([]users.User, *errors.RestErr) {
@@ -30,7 +31,7 @@ func CreateUser(user users.User) ([]users.User, *errors.RestErr){
 
 	user.CreateDate=date_utils.GetNowLocalString()
 	user.Status = users.StatusRegister
-
+	user.Password = password_utils.GetMD5(user.Password)
 	lastid,err := user.Save()
 	//log.Println(lastid)
 	if  err != nil{

@@ -20,7 +20,7 @@ type User struct {
 	Email      	string 	`json:"email,omitempty"`		//dipergunakan untuk mapping
 	CreateDate 	string 	`json:"create_date,omitempty"`	//dipergunakan untuk mapping
 	Status		string 	`json:"status,omitempty"`
-	Password	string	`json:"-"`	// - tidak menampilkan isinya secara komplit
+	Password	string	`json:"password,omitempty"`	// - tidak menampilkan isinya secara komplit
 	PageFrom  	int64 	`json:"page_from,omitempty"`	//dipergunakan untuk mapping
 	PageTo  	int64 	`json:"page_to,omitempty"`	//dipergunakan untuk mapping, omitempty boleh kosong
 }
@@ -37,6 +37,9 @@ type UserResp struct {
 	Data    []User 				`json:"data"`
 }
 
+
+var xuser []User
+
 func (user *User) Validate() *errors.RestErr{
 	user.FirstName=strings.TrimSpace(strings.ToLower(user.FirstName))
 	user.LastName=strings.TrimSpace(strings.ToLower(user.LastName))
@@ -45,8 +48,6 @@ func (user *User) Validate() *errors.RestErr{
 	if user.Email==""{
 		return errors.NewBedrequest("Bed Email Request")
 	}
-
-
 	user.Password=strings.TrimSpace(user.Password)
 	if user.Password==""{
 		return errors.NewBedrequest("Invalid Password")

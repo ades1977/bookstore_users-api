@@ -6,6 +6,7 @@ import (
 	"github.com/ades1977/bookstore_users-api/services"
 	"github.com/ades1977/bookstore_users-api/utils/errors"
 	"github.com/gin-gonic/gin"
+	"log"
 	"net/http"
 	"strconv"
 )
@@ -73,14 +74,6 @@ func UpdateUser(c *gin.Context) {
 	response.Status=200
     response.Data = result
 
-    /*
-	response.Data.Id=result.Id
-	response.Data.FirstName=result.FirstName
-	response.Data.LastName=result.LastName
-	response.Data.Email=result.Email
-	response.Data.CreateDate=result.CreateDate
-	response.Data.Status=result.Status
-	*/
 
 	c.Header("Content-Type", "application/json")
 	c.JSON(http.StatusOK, response)
@@ -125,6 +118,9 @@ func DeleteUser(c *gin.Context) {
 
 func GetUser(c *gin.Context) {
 	userId, userErr := strconv.ParseInt(c.Param("user_id"),10,64)
+	t := c.GetHeader("x-Public")
+	log.Println(t)
+
 	if userErr != nil {
 		err := errors.NewBedrequest("Userid should be a number ")
 		c.JSON(err.Status,err)
@@ -141,16 +137,9 @@ func GetUser(c *gin.Context) {
 	response.Message="Retrive User Success"
 	response.Status=200
 	response.Data = result
-	/*
-	response.Data .Id= result.Id
-	response.Data.FirstName= result.FirstName
-	response.Data.LastName = result.LastName
-	response.Data.Email = result.Email
-	response.Data.CreateDate = result.CreateDate
-	*/
 
 	c.Header("Content-Type", "application/json")
-	c.JSON(http.StatusOK, response)
+	c.JSON(http.StatusOK, result)
 }
 
 func GetUserPaging(c *gin.Context) {
